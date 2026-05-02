@@ -18,6 +18,7 @@ import {
 import {Progress} from '@/components/ui/progress'
 import {SegmentedControl} from '@/components/ui/segmented-control'
 import {LOADING_DASH} from '@/constants'
+import {useBattery} from '@/hooks/use-battery'
 import {useCpuForUi} from '@/hooks/use-cpu'
 import {useDiskForUi, useSystemDiskForUi} from '@/hooks/use-disk'
 import {useMemoryForUi, useSystemMemoryForUi} from '@/hooks/use-memory'
@@ -206,7 +207,10 @@ function MemorySection() {
 function CpuSection() {
 	const {i18n} = useTranslation()
 	const {isLoading, value, secondaryValue, progress, apps} = useCpuForUi({poll: true})
-
+	const battery = useBattery()
+	const batteryIcon = battery.status === 'Charging' ? '⚡' : '🔋'
+	const batteryText = battery.level !== undefined ? `${batteryIcon} ${battery.level}%` : '--'
+	const batteryLabel = battery.status === 'Charging' ? 'Charging' : battery.status === 'Full' ? 'Full' : 'Discharging'
 	return (
 		<>
 			<div className='sm:hidden'>
@@ -214,6 +218,18 @@ function CpuSection() {
 			</div>
 			{isLoading && <AppListSkeleton systemApps={[systemAppsKeyed.UMBREL_system]} />}
 			<AppList apps={apps} formatValue={(n) => formatNumberI18n({n, locale: i18n.language}) + '%'} />
+			{battery.level !== undefined && (
+				<div className='rounded-12 bg-white/5 p-4 flex items-center justify-between'>
+					<div className='flex flex-col gap-1'>
+						<span className='text-[0.8rem] font-bold opacity-40 uppercase tracking-wider'>Battery</span>
+						<span className='text-24 font-semibold -tracking-3 opacity-80'>{batteryText}</span>
+						<span className='text-13 font-semibold -tracking-2 opacity-40'>{batteryLabel}</span>
+					</div>
+					<div className='w-32'>
+						<Progress value={battery.level} variant='primary' />
+					</div>
+				</div>
+			)}
 		</>
 	)
 }

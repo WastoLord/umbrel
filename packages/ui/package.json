@@ -139,6 +139,7 @@
 		"prettier": "3.8.1",
 		"prettier-plugin-css-order": "2.2.0",
 		"prettier-plugin-tailwindcss": "^0.7.2",
+		"rollup": "^3.29.4",
 		"serve": "14.2.5",
 		"tailwindcss": "^4.1.18",
 		"ts-plugin-sort-import-suggestions": "^1.0.4",

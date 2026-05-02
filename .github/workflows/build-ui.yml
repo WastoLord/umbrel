@@ -1,0 +1,29 @@
+name: Build UI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install and build UI
+        working-directory: packages/ui
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: umbrel-ui-dist
+          path: packages/ui/dist/
+          retention-days: 7
