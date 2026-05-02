@@ -15,6 +15,10 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install umbreld deps (for tsconfig resolution)
+        working-directory: packages/umbreld
+        run: npm install --ignore-scripts
+
       - name: Install and build UI
         working-directory: packages/ui
         run: |
